@@ -13,8 +13,7 @@
 **/
 template<class T>
 void Stack<T>::Push(T newItem) {
-    /* YOUR CODE HERE! */
-
+    myStack.PushR(newItem);
 }
 
 /**
@@ -28,9 +27,7 @@ void Stack<T>::Push(T newItem) {
 **/
 template <class T>
 T Stack<T>::Pop() {
-    /* YOUR CODE HERE! */
-    T removed;
-
+    T removed = myStack.PopR();
     return removed;
 }
 
@@ -44,9 +41,7 @@ T Stack<T>::Pop() {
 **/
 template <class T>
 T Stack<T>::Peek() {
-    /* YOUR CODE HERE! */
-    T peeked;
-
+    T peeked = myStack.PeekR();
     return peeked;
 }
 
@@ -59,6 +54,5 @@ T Stack<T>::Peek() {
 **/
 template <class T>
 bool Stack<T>::IsEmpty() const {
-    /* REPLACE THE LINE BELOW WITH YOUR CODE */
-    return true;
+    return myStack.IsEmpty();
 }
