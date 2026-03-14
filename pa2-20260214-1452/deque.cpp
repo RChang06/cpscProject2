@@ -8,8 +8,6 @@ template <class T>
 Deque<T>::Deque() {
     this->n1 = 0;
     this->n2 = 0;
-    /* YOUR CODE HERE! */
-
 }
 
 /**
@@ -21,8 +19,6 @@ template <class T>
 void Deque<T>::PushR(T newItem) {
     this->data.push_back(newItem);
     n2++; 
-    /* YOUR CODE HERE! */
-
 }
 
 /**
@@ -35,7 +31,6 @@ void Deque<T>::PushR(T newItem) {
 **/
 template <class T>
 T Deque<T>::PopL() {
-    /* YOUR CODE HERE! */
     T removed;
     removed = data[n1];
     n1++; 
@@ -87,7 +82,6 @@ T Deque<T>::PopR() {
 **/
 template <class T>
 T Deque<T>::PeekL() {
-    /* YOUR CODE HERE! */
     return data[n1];
 }
 
@@ -99,7 +93,6 @@ T Deque<T>::PeekL() {
 **/
 template <class T>
 T Deque<T>::PeekR() {
-    /* YOUR CODE HERE! */
     return data[n1 + n2 -1];
 }
 
@@ -112,6 +105,5 @@ T Deque<T>::PeekR() {
 
 template <class T>
 bool Deque<T>::IsEmpty() const {
-    /* REPLACE THE LINE BELOW WITH YOUR CODE */
     return n2 == 0;
 }
