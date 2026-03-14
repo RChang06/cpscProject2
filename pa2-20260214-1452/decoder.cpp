@@ -164,7 +164,7 @@ bool Decoder::Good(vector<vector<bool>>& v, vector<vector<int>>& d, pair<int, in
 
 vector<pair<int, int>> Decoder::Neighbours(pair<int, int> curr) {
     vector<pair<int, int>> v;
-	vector<vector<int>> dirs {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    vector<vector<int>> dirs {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 	for (auto pos: dirs) {
 		pair<int, int> add;
 		add.first = pos[0] + curr.first;
