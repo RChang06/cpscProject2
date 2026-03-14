@@ -80,6 +80,13 @@ bool TreasureMap::Good(vector<vector<bool>>& v, pair<int, int> curr, pair<int, i
 vector<pair<int, int>> TreasureMap::Neighbours(pair<int, int> curr) {
 	/* REPLACE THE LINES BELOW WITH YOUR CODE */
 	vector<pair<int, int>> v;
+	vector<vector<int>> dirs {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+	for (auto pos: dirs) {
+		pair<int, int> add;
+		add.first = pos[0] + curr.first;
+		add.second = pos[1] + curr.second;
+		v.push_back(add);
+	}
 	return v;
 }
 
