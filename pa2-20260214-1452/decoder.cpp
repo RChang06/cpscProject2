@@ -79,7 +79,51 @@ PNG Decoder::RenderSolution() {
 
 PNG Decoder::RenderMaze(){
     
-    return PNG();
+    PNG res = mapImg;
+    unsigned int width = res.width();
+    unsigned int height = res.height();
+
+    vector<vector<bool>> visited(width, vector<bool>(height, false));
+    vector<vector<int>> distance(width, vector<int>(height, 0)); // Needed for Good()
+    Queue<pair<int, int>> q;
+
+    visited[start.first][start.second] = true;
+    distance[start.first][start.second] = 0;
+    q.Enqueue(start);
+    //traversal bfs
+
+    while (!q.IsEmpty()) {
+        pair<int, int> curr = q.Dequeue();
+        
+        // Darken the current maze pixel
+        SetGrey(res, curr);
+
+        vector<pair<int, int>> neighbors = Neighbours(curr);
+        for (pair<int, int> next : neighbors) {
+            if (Good(visited, distance, curr, next)) {
+                visited[next.first][next.second] = true;
+                distance[next.first][next.second] = distance[curr.first][curr.second] + 1;
+                q.Enqueue(next);
+            }
+        }
+    }
+    //draw a 7x7 red dot
+    for (int i = -3; i <= 3; i++) {
+        for (int j = -3; j <= 3; j++) {
+            int x = start.first + i;
+            int y = start.second + j;
+
+            //boundary check 
+            if (x >= 0 && x < (int)width && y >= 0 && y < (int)height) {
+                RGBAPixel* pixel = res.getPixel(x, y);
+                pixel->r = 255;
+                pixel->g = 0;
+                pixel->b = 0;
+            }
+        }
+    }
+
+    return res;
 }
 
 void Decoder::SetGrey(PNG& im, pair<int, int> loc){
@@ -131,17 +175,12 @@ vector<pair<int, int>> Decoder::Neighbours(pair<int, int> curr) {
 }
 
 bool Decoder::Compare(RGBAPixel p, int d) {
-    // 1. Extract the bits (same logic as SetLOB, but in reverse)
-    // Red has bits 5,4 | Green has 3,2 | Blue has 1,0
-    int r_bits = p.r & 0x03; // 00000011
+    int r_bits = p.r & 0x03; 
     int g_bits = p.g & 0x03;
     int b_bits = p.b & 0x03;
 
-    // 2. Reconstruct the 6-bit value
-    // Shift Red left by 4, Green left by 2, and leave Blue at the end
     int maze_value = (r_bits << 4) | (g_bits << 2) | b_bits;
 
-    // 3. Compare to (d + 1) mod 64
     return maze_value == (d + 1) % 64;
 }
 
