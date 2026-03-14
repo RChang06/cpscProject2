@@ -54,8 +54,18 @@ T Deque<T>::PopL() {
 template <class T>
 T Deque<T>::PopR() {
     T removed = data.back();
-    data.pop_back();
+    data.pop_back(); 
     n2--; 
+
+    if (n1 >= n2) {
+        vector<T> newData;
+        for (int i = 0; i < n2; i++) {
+            newData.push_back(data[n1 + i]);
+        }
+        data = newData;
+        n1 = 0;
+    }
+
     return removed;
 }
 
