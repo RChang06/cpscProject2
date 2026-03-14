@@ -73,32 +73,44 @@ PNG TreasureMap::RenderMap() {
     return map;
 }
 
-
 PNG TreasureMap::RenderMaze() {
-	PNG res = base;
-	int width = res.width();
-	int height = res.height();
-	vector<vector<bool>> visited(width, vector<bool>(height, false));
-	vector<vector<int>> distance(width, vector<int>(height, 0));
-	Queue<pair<int, int>> q;
-	visited[start.first][start.second] = true;
-	distance[start.first][start.second] = 0;
-	SetLOB(res, start, 0);
-	q.Enqueue(start);
+    PNG res = base;
+    int width = res.width();
+    int height = res.height();
+    vector<vector<bool>> visited(width, vector<bool>(height, false));
+    Queue<pair<int, int>> q;
+    
+    visited[start.first][start.second] = true;
+    SetGrey(res, start); 
+    q.Enqueue(start);
 
-	while (!q.IsEmpty()){
-		pair<int, int> curr = q.Dequeue();
-		vector<pair<int,int>> neighs = Neighbours(curr);
-		for (pair<int, int>p : neighs) {
-			if (Good(visited, curr, p)) {
-				visited[p.first][p.second] = true; 
-				distance[p.first][p.second] = distance[curr.first][curr.second] + 1;
-				SetLOB(res, p, distance[p.first][p.second]);
-				q.Enqueue(p);
-			}
-		}
-	}
-	return res;
+    while (!q.IsEmpty()){
+        pair<int, int> curr = q.Dequeue();
+        vector<pair<int,int>> neighs = Neighbours(curr);
+        for (pair<int, int>p : neighs) {
+            if (Good(visited, curr, p)) {
+                visited[p.first][p.second] = true; 
+                SetGrey(res, p);  
+                q.Enqueue(p);
+            }
+        }
+    }
+
+    for (int i = -3; i <= 3; i++) {
+        for (int j = -3; j <= 3; j++) {
+            int x = start.first + i;
+            int y = start.second + j;
+            
+            if (x >= 0 && x < width && y >= 0 && y < height) {
+                RGBAPixel* pixel = res.getPixel(x, y);
+                pixel->r = 255;
+                pixel->g = 0;
+                pixel->b = 0;
+            }
+        }
+    }
+
+    return res;
 }
 
 bool TreasureMap::Good(vector<vector<bool>>& v, pair<int, int> curr, pair<int, int> next) {
@@ -122,15 +134,13 @@ bool TreasureMap::Good(vector<vector<bool>>& v, pair<int, int> curr, pair<int, i
 
 vector<pair<int, int>> TreasureMap::Neighbours(pair<int, int> curr) {
 	/* REPLACE THE LINES BELOW WITH YOUR CODE */
-	vector<pair<int, int>> v;
-	vector<vector<int>> dirs {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-	for (auto pos: dirs) {
-		pair<int, int> add;
-		add.first = pos[0] + curr.first;
-		add.second = pos[1] + curr.second;
-		v.push_back(add);
-	}
-	return v;
+    vector<pair<int, int>> v;
+    v.push_back(make_pair(curr.first - 1, curr.second));     // Left
+    v.push_back(make_pair(curr.first,     curr.second + 1)); // Below
+    v.push_back(make_pair(curr.first + 1, curr.second));     // Right
+    v.push_back(make_pair(curr.first,     curr.second - 1)); // Above
+    return v;
+
 }
 
 /***********************************************
