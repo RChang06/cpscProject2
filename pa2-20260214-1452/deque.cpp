@@ -6,6 +6,8 @@
 
 template <class T>
 Deque<T>::Deque() {
+    this->n1 = 0;
+    this->n2 = 0;
     /* YOUR CODE HERE! */
 
 }
@@ -17,6 +19,8 @@ Deque<T>::Deque() {
 **/
 template <class T>
 void Deque<T>::PushR(T newItem) {
+    this->data.push_back(newItem);
+    n2++; 
     /* YOUR CODE HERE! */
 
 }
@@ -33,6 +37,20 @@ template <class T>
 T Deque<T>::PopL() {
     /* YOUR CODE HERE! */
     T removed;
+    removed = data[n1];
+    n1++; 
+    n2--;
+    //smart way of halving it 
+    if (n2 <= n1) {
+        vector<T> newData;
+        newData.reserve(n2);
+        for (int i = 0; i < n2; i++){
+            newData.push_back(data[n1+i]);
+        }
+        data = newData; 
+        n1 = 0; 
+
+    }
 
     return removed;
 }
@@ -44,8 +62,19 @@ T Deque<T>::PopL() {
 **/
 template <class T>
 T Deque<T>::PopR() {
-    /* YOUR CODE HERE! */
-    T removed;
+
+    T removed = data[n1 + n2 - 1];
+    n2--;
+
+    if (n2 <= n1) {
+        vector<T> newData;
+        newData.reserve(n2);
+        for (int i = 0; i < n2; i++) {
+            newData.push_back(data[n1 + i]);
+        }
+        data = newData;
+        n1 = 0;
+    }
 
     return removed;
 }
@@ -59,9 +88,7 @@ T Deque<T>::PopR() {
 template <class T>
 T Deque<T>::PeekL() {
     /* YOUR CODE HERE! */
-    T peeked;
-
-    return peeked;
+    return data[n1];
 }
 
 /**
@@ -73,9 +100,7 @@ T Deque<T>::PeekL() {
 template <class T>
 T Deque<T>::PeekR() {
     /* YOUR CODE HERE! */
-    T peeked;
-
-    return peeked;
+    return data[n1 + n2 -1];
 }
 
 /**
@@ -83,8 +108,10 @@ T Deque<T>::PeekR() {
  *
  * @return bool which is true if the Deque is empty, false otherwise.
 **/
+
+
 template <class T>
 bool Deque<T>::IsEmpty() const {
     /* REPLACE THE LINE BELOW WITH YOUR CODE */
-    return true;
+    return n2 == 0;
 }
