@@ -157,7 +157,7 @@ bool Decoder::Good(vector<vector<bool>>& v, vector<vector<int>>& d, pair<int, in
         return false;
     }
     RGBAPixel* pNext = mapImg.getPixel(next.first, next.second);
-    int expectedValue = d[curr.first][curr.first];
+    int expectedValue = d[curr.first][curr.second];
     return Compare(*pNext, expectedValue);
     
 }
