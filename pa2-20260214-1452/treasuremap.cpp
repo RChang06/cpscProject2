@@ -36,6 +36,21 @@ PNG TreasureMap::RenderMaze() {
 
 bool TreasureMap::Good(vector<vector<bool>>& v, pair<int, int> curr, pair<int, int> next) {
 	/* REPLACE THE LINE BELOW WITH YOUR CODE */
+	//check for boundries
+	if (next.first < 0 || next.first >= base.width() 
+		|| next.second < 0 || next.second >= (int)base.height()){
+		return false;
+	}
+	if (v[next.first][next.second] == true) {
+		return false; 
+	}
+	RGBAPixel* currColor = maze.getPixel(curr.first, curr.second);
+	RGBAPixel* nextColor = maze.getPixel(next.first, next.second);
+
+	if (*currColor == *nextColor) {
+		return true; 
+	}
+	
 	return false;
 }
 
