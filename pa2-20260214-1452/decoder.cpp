@@ -9,17 +9,76 @@
 #include "stack.h"
 using namespace std;
 
-Decoder::Decoder(const PNG & tm, pair<int, int> s) : start(s), mapImg(tm) {
-    /* YOUR CODE HERE */
+Decoder::Decoder(const PNG& tm, pair<int, int> s) : start(s), mapImg(tm) {
+    unsigned int width = mapImg.width();
+    unsigned int height = mapImg.height();
+
+    vector<vector<bool>> visited(width, vector<bool>(height, false));
+    vector<vector<int>> distance(width, vector<int>(height, 0));
+    vector<vector<pair<int, int>>> parent(width, vector<pair<int, int>>(height, make_pair(-1, -1)));
+
+    Queue<pair<int, int>> q;
+
+    visited[start.first][start.second] = true;
+    distance[start.first][start.second] = 0;
+    q.Enqueue(start);
+
+    pair<int, int> farthestPoint = start;
+    int maxDist = 0;
+
+    while (!q.IsEmpty()) {
+        pair<int, int> curr = q.Dequeue();
+        vector<pair<int, int>> neighbors = Neighbours(curr);
+
+        for (pair<int, int> next : neighbors) {
+            if (Good(visited, distance, curr, next)) {
+                visited[next.first][next.second] = true;
+                distance[next.first][next.second] = distance[curr.first][curr.second] + 1;
+                parent[next.first][next.second] = curr;
+                
+                if (distance[next.first][next.second] >= maxDist) {
+                    maxDist = distance[next.first][next.second];
+                    farthestPoint = next;
+                }
+                
+                q.Enqueue(next);
+            }
+        }
+    }
+
+    pair<int, int> currTrace = farthestPoint;
+    while (currTrace != make_pair(-1, -1)) {
+        pathPts.push_back(currTrace);
+        currTrace = parent[currTrace.first][currTrace.second];
+    }
+    
+    int n = pathPts.size();
+
+    for (int i = 0; i < n / 2; i++) {   
+        pair<int, int> temp = pathPts[i];
+        pathPts[i] = pathPts[n - 1 - i];
+        pathPts[n - 1 - i] = temp;
+    }   
 }
 
-PNG Decoder::RenderSolution(){
-    
-    return PNG();
+PNG Decoder::RenderSolution() {
+    PNG map = mapImg;
+
+    for (size_t i = 0; i < pathPts.size(); i++) {
+        pair<int, int> curr = pathPts[i];
+        
+        RGBAPixel* pixel = map.getPixel(curr.first, curr.second);
+        
+        pixel->r = 255;
+        pixel->g = 0;
+        pixel->b = 0;
+    }
+
+    return map;
 }
 
 PNG Decoder::RenderMaze(){
-    /* REPLACE THE LINE BELOW WITH YOUR CODE */
+    
     return PNG();
 }
 
@@ -35,14 +94,11 @@ void Decoder::SetGrey(PNG& im, pair<int, int> loc){
 }
 
 pair<int, int> Decoder::FindSpot(){
-    // returns treasure spot
-    pair<int, int> spot;
-    return spot;
+    return pathPts.back();
 }
 
 int Decoder::PathLength(){
-    //returns distance from start to treasure in manhattan distance
-    return -1;
+    return pathPts.size();
 }
 
 bool Decoder::Good(vector<vector<bool>>& v, vector<vector<int>>& d, pair<int, int> curr, pair<int, int> next){
@@ -63,7 +119,6 @@ bool Decoder::Good(vector<vector<bool>>& v, vector<vector<int>>& d, pair<int, in
 }
 
 vector<pair<int, int>> Decoder::Neighbours(pair<int, int> curr) {
-    /* REPLACE THE LINES BELOW WITH YOUR CODE */
     vector<pair<int, int>> v;
 	vector<vector<int>> dirs {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 	for (auto pos: dirs) {
