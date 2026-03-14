@@ -11,11 +11,10 @@ using namespace std;
 
 Decoder::Decoder(const PNG & tm, pair<int, int> s) : start(s), mapImg(tm) {
     /* YOUR CODE HERE */
-    
 }
 
 PNG Decoder::RenderSolution(){
-    /* REPLACE THE LINE BELOW WITH YOUR CODE */
+    
     return PNG();
 }
 
@@ -25,18 +24,24 @@ PNG Decoder::RenderMaze(){
 }
 
 void Decoder::SetGrey(PNG& im, pair<int, int> loc){
-    /* YOUR CODE HERE */
-    
+	int x = loc.first;
+	int y = loc.second;
+
+	RGBAPixel *pixel = im.getPixel(x, y);
+	
+	pixel->r = 2 * (pixel->r / 4);
+    pixel->g = 2 * (pixel->g / 4);
+    pixel->b = 2 * (pixel->b / 4);
 }
 
 pair<int, int> Decoder::FindSpot(){
-    /* REPLACE THE LINES BELOW WITH YOUR CODE */
+    // returns treasure spot
     pair<int, int> spot;
     return spot;
 }
 
 int Decoder::PathLength(){
-    /* REPLACE THE LINE BELOW WITH YOUR CODE */
+    //returns distance from start to treasure in manhattan distance
     return -1;
 }
 

@@ -14,13 +14,6 @@ TreasureMap::TreasureMap(const PNG& baseim, const PNG& mazeim, pair<int, int> s)
 	maze = mazeim;
 }
 
-/**
-     * Changes the pixel at position loc to consist of colour channel
-     * values which are 50% of their original. Note that because of 
-     * our encoding scheme which essentially invalidates the lower
-     * order bits, you should compute each value as 2*(x/4), where
-     * x is the integer value of a colour channel.
-    **/
 void TreasureMap::SetGrey(PNG& im, pair<int, int> loc) {
 	int x = loc.first;
 	int y = loc.second;
@@ -105,12 +98,11 @@ PNG TreasureMap::RenderMaze() {
 			}
 		}
 	}
-	/* REPLACE THE LINE BELOW WITH YOUR CODE */
 	return res;
 }
 
 bool TreasureMap::Good(vector<vector<bool>>& v, pair<int, int> curr, pair<int, int> next) {
-	//check for boundries
+	//check for boundaries
 	if (next.first < 0 || next.first >= base.width() 
 		|| next.second < 0 || next.second >= (int)base.height()){
 		return false;
