@@ -31,22 +31,18 @@ void Deque<T>::PushR(T newItem) {
 **/
 template <class T>
 T Deque<T>::PopL() {
-    T removed;
-    removed = data[n1];
+    T removed = data[n1];
     n1++; 
     n2--;
-    //smart way of halving it 
-    if (n2 <= n1) {
+
+    if (n1 >= n2) {
         vector<T> newData;
-        newData.reserve(n2);
-        for (int i = 0; i < n2; i++){
-            newData.push_back(data[n1+i]);
+        for (int i = 0; i < n2; i++) {
+            newData.push_back(data[n1 + i]);
         }
-        data = newData; 
-        n1 = 0; 
-
+        data = newData;
+        n1 = 0;
     }
-
     return removed;
 }
 /**
@@ -57,20 +53,9 @@ T Deque<T>::PopL() {
 **/
 template <class T>
 T Deque<T>::PopR() {
-
-    T removed = data[n1 + n2 - 1];
-    n2--;
-
-    if (n2 <= n1) {
-        vector<T> newData;
-        newData.reserve(n2);
-        for (int i = 0; i < n2; i++) {
-            newData.push_back(data[n1 + i]);
-        }
-        data = newData;
-        n1 = 0;
-    }
-
+    T removed = data.back();
+    data.pop_back();
+    n2--; 
     return removed;
 }
 
